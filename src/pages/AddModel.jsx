@@ -6,28 +6,36 @@ function AddModel(setErrorMessage) {
     const [model, setModel] = useState()
     const [name, setName] = useState()
     const [imgname, setImgName] = useState()
+    const [modelname, setModelName] = useState()
 
     function handleImage(event) {
         setImage(event.target.files[0])
+        setImgName(event.target.files[0].name)
         console.log(event.target.files[0])
     }
 
     function handleModel(event) {
         setModel(event.target.files[0])
-        setImgName(event.target.files[0].name)
+        setModelName(event.target.files[0].name)
         console.log(event.target.files[0])
     }
 
     function handleUpload(e){
         handleModelUpload(e);
-        handleImageUpload(e);
     }
     const handleModelUpload= async (e) => {
         e.preventDefault();
+
+        const formData = new FormData;
+        formData.append('name', name)
+        formData.append('imgname', imgname)
+        formData.append('modelname', modelname)
+        formData.append('icon', image)
+        formData.append('model', model)
+
         const requestOptions = {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({name: name, imgname: imgname})
+            body: formData
         };
         const response = await fetch("http://localhost:8000/api/models", requestOptions);
         if(!response) {
@@ -35,7 +43,7 @@ function AddModel(setErrorMessage) {
         } else {
         }
     };
-    const handleImageUpload= async (e) => {
+    /* const handleImageUpload= async (e) => {
         e.preventDefault();
         const formData = new FormData;
         formData.append('icon', image)
@@ -49,7 +57,7 @@ function AddModel(setErrorMessage) {
             setErrorMessage("Model cannot be uploaded")
         } else {
         }
-    };
+    };*/
 
     return (
         <div>

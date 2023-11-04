@@ -12,9 +12,9 @@ router.put('/users/:id', controller.updateUserById);
 router.get('/models/', controller.getModels);
 router.post('/models',controller.addModel );
 router.get('/models/:id', controller.getModelById);
-router.post('/uploadModel/', controller.uploadModel);
 //router.delete('/models/:id', controller.deleteModelById);
 //router.put('/models/:id', controller.updateModelById);
 
+router.get('/images/:id', controller.getImageById);
 
 module.exports = router;

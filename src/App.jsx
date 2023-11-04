@@ -5,6 +5,7 @@ import Models from './pages/Models';
 import Account from './pages/Account';
 import AddModel from './pages/AddModel';
 import Navbar from "./components/Navbar";
+import Model from './pages/Model';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
                   <Route path='/models' element={<Models/>}/>
                   <Route path='/addmodel' element={<AddModel/>}/>
                   <Route path='/myaccount' element={<Account/>}/>
+                  <Route path='/models/:id' element={<Model/>}/>
               </Routes>
           </Router>
       </>

@@ -82,34 +82,25 @@ const getModels = (req, res) => {
     })
 };
 
-//this method is responsible for uploading the icon and js file to the server
-const uploadModel = (req, res, next) => {
-    const icon = req.files.icon;
-    const model = req.files.model;
-    icon.mv(path.join(__dirname + '/../uploads/images/' + icon.name), function(err, result) {
+const addModel = (req, res, next) => {
+    const {name, creator = 'Admin', creation_date = new Date(), status = 'U', icon = req.files.icon, model = req.files.model, imgname, modelname, mpath = path.join('/uploads/models/' + modelname)} = req.body;
+    const ipath = path.join('/uploads/images/' + imgname);
+
+    icon.mv(path.join(__dirname + 'http:/../../public/uploads/images/' + icon.name), function(err, result) {
         if(err)
             throw err;
-        model.mv(path.join(__dirname + '/../uploads/models/' + model.name), function(err, result) {
-            if(err)
-                throw err;
-            res.status(201).send({
-                success: true,
-                message: "File uploaded!"
-            });
-        })
     })
 
-}
-
-const addModel = (req, res, next) => {
-    const {name, creator = 'Admin', creation_date = new Date(), status = 'U', mpath = path.join(__dirname + '/../uploads/models/' + name), imgname} = req.body;
-    const ipath = path.join(__dirname + '/../uploads/models/' + imgname);
+    model.mv(path.join(__dirname + '/../../public/uploads/models/' + model.name), function(err, result) {
+        if(err)
+            throw err;
+    })
 
     pool.query(queries.addImage, [ipath], (error, results) => {
             if (error) throw error;
             console.log("Image added successfully.");
             const image = results.rows[0].id;
-            pool.query(queries.addModel, [name, creator, creation_date, status, mpath, image], (error, results) => {
+            pool.query(queries.addModel, [name, creator, creation_date, status, image, mpath, ipath], (error, results) => {
                 if (error) throw error;
                 res.status(201).send("Model added successfully.");
                 console.log("Model added successfully.");
@@ -124,6 +115,14 @@ const getModelById = (req, res) => {
     const id = parseInt(req.params.id);
     pool.query(queries.getModelById, [id], (error, results) => {
         if(error) throw error;
+        res.status(200).json(results.rows[0]);
+    })
+};
+
+const getImageById = (req, res) => {
+    const id = parseInt(req.params.id);
+    pool.query(queries.getImageById, [id], (error, results) => {
+        if(error) throw error;
         res.status(200).json(results.rows);
     })
 };
@@ -137,5 +136,5 @@ module.exports = {
     updateUserById,
     getModelById,
     getModels,
-    uploadModel
+    getImageById
 };
