@@ -18,14 +18,26 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'AddModel',
+        title: 'Add Model',
         path: '/addmodel',
         icon: <AiIcons.AiOutlinePlusCircle/>,
         cName: 'nav-text'
     },
     {
+        title: 'Teacher Panel',
+        path: '/teacher',
+        icon: <MdIcons.MdManageAccounts/>,
+        cName: 'nav-text'
+    },
+    {
         title: 'Account',
         path: '/myaccount',
+        icon: <MdIcons.MdManageAccounts/>,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Admin Panel',
+        path: '/admin',
         icon: <MdIcons.MdManageAccounts/>,
         cName: 'nav-text'
     }

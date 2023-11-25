@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import ErrorMessage from "../components/ErrorMessage";
 import Grid from "@mui/material/Grid";
-import Model from './Model';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
-import { useLoader } from '@react-three/fiber'
 import {Link} from "react-router-dom";
+import "../styles/AddModel.css";
 
 const Models = () => {
     const [id, setId] = useState(null);
@@ -29,10 +27,6 @@ const Models = () => {
         getModels();
     }, []);
 
-    const handleSelect = async(id) => {
-        setId(id);
-    }
-
         return(
             <>
                 <div>
@@ -40,7 +34,7 @@ const Models = () => {
                     {models ? (
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {models.map((model) => (
-                                    <Grid item xs={2} sm={4} md={4} key={model.id}>
+                                    <Grid item key={model.id}>
                                         <div>
                                             <img src = {model.image_path}/>
                                         </div>

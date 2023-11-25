@@ -1,9 +1,10 @@
 const pool = require('../../db');
 const queries = require('./queries');
 const path = require("path");
+const bcrypt = require("bcrypt");
+const {createTokens} = require('./JWT');
 
 /* CRUDs for USERS table */
-
 const getUsers = (req, res) => {
     pool.query(queries.getUsers, (error, results) => {
         if(error) throw error;
@@ -119,6 +120,50 @@ const getModelById = (req, res) => {
     })
 };
 
+const deleteModelById = (req, res) => {
+    const id = parseInt(req.params.id);
+    pool.query(queries.getModelById, [id], (error, results) => {
+        const noModelFound = !results.rows.length;
+        if(noModelFound) {
+            res.send("Model doesn't exist.");
+        }
+        pool.query(queries.deleteModelById, [id], (error, results) => {
+            if(error) throw error;
+            res.status(200).send("Model deleted successfully.");
+        })
+    })
+};
+
+const acceptModelById = (req, res) => {
+    const id = parseInt(req.params.id);
+    const status = "A";
+    pool.query(queries.getModelById, [id], (error, results) => {
+        const noModelFound = !results.rows.length;
+        if(noModelFound) {
+            res.send("Model doesn't exist.");
+        }
+        pool.query(queries.updateModelById, [status, id], (error, results) => {
+            if (error) throw error;
+            response.status(200).send("Update successful.");
+        })
+    })
+}
+
+const rejectModelById = (req, res) => {
+    const id = parseInt(req.params.id);
+    const status = "R";
+    pool.query(queries.getModelById, [id], (error, results) => {
+        const noModelFound = !results.rows.length;
+        if(noModelFound) {
+            res.send("Model doesn't exist.");
+        }
+        pool.query(queries.updateModelById, [status, id], (error, results) => {
+            if (error) throw error;
+            response.status(200).send("Update successful.");
+        })
+    })
+}
+
 const getImageById = (req, res) => {
     const id = parseInt(req.params.id);
     pool.query(queries.getImageById, [id], (error, results) => {
@@ -126,6 +171,74 @@ const getImageById = (req, res) => {
         res.status(200).json(results.rows);
     })
 };
+
+const register = (req, res) => {
+    const {firstname, surname, password, email, login, role = 'S'} = req.body;
+
+    bcrypt.hash(password, 10,).then((hash => {
+        pool.query(queries.checkEmailExists, [email], (error, results) => {
+            if (results.rows.length) {
+                res.send("Email already exists.");
+            }
+            else {
+                //check if email exists
+                pool.query(queries.checkLoginExists, [login], (error, results) => {
+                    if (results.rows.length) {
+                        res.send("Login already exists.");
+                    }
+                    else {
+                        pool.query(queries.addUser, [firstname, surname, hash, email, login, role], (error, results) => {
+                                if (error) throw error;
+                                res.status(201).send("User registered.");
+                                console.log("User registered.");
+                            }
+                        );
+                    }
+                });
+            }
+        });
+    }))
+}
+
+const login = (req, res) => {
+    const {username, password} = req.body;
+    pool.query(queries.getUserByLogin, [username], (error, results) => {
+        if (results.rows.length===0) {
+            res.status(400).send({error: "Login doesn't exist."});
+        }
+        else {
+            console.log(results.rows[0]);
+            const user = results.rows[0];
+            const dbPassword = user.password;
+            bcrypt.compare(password, dbPassword).then((match) => {
+                if (!match) {
+                    res.status(400).json({error: "Wrong username or password"})
+                } else {
+                    const accessToken = createTokens(user);
+                    res.cookie("access-token", accessToken, {
+                        maxAge: 60*60*1000,
+                        httpOnly: true
+                    })
+                    switch (username) {
+                        case "Marcin":
+                            res.status(200).json(`Przed państwem podejście do dedykacji numer jeden \n Dla kolegi, który motywację daje mi w potrzebie \n Nie mogłam napisać tej pracy cały Boży rok \n Przyszedł Marcin i powiedział że dla niego OK`);
+                        break;
+                            default:
+                            res.status(200).json('User logged in.');
+                    }
+                }
+            })
+        }
+    })
+}
+
+const myProfile = (req, res) => {
+    res.json({message: req.userId + "and" + req.userName});
+}
+
+const logout =  (req, res) => {
+    return res.clearCookie("access-token").status(200).json({message: "Logged out successfully."});
+}
 
 module.exports = {
     getUsers,
@@ -136,5 +249,12 @@ module.exports = {
     updateUserById,
     getModelById,
     getModels,
-    getImageById
+    deleteModelById,
+    acceptModelById,
+    rejectModelById,
+    getImageById,
+    register,
+    login,
+    myProfile,
+    logout
 };

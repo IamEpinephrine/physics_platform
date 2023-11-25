@@ -43,25 +43,10 @@ function AddModel(setErrorMessage) {
         } else {
         }
     };
-    /* const handleImageUpload= async (e) => {
-        e.preventDefault();
-        const formData = new FormData;
-        formData.append('icon', image)
-        formData.append('model', model)
-        const requestOptions = {
-            method: "POST",
-            body: formData
-        };
-        const response = await fetch("http://localhost:8000/api/uploadModel", requestOptions);
-        if(!response) {
-            setErrorMessage("Model cannot be uploaded")
-        } else {
-        }
-    };*/
 
     return (
         <div>
-            <h2>Upload your JS model</h2>
+            <h2>Upload your model</h2>
             <form onSubmit={handleUpload}>
                 <div className='field'>
                     <label className='label'>Name</label>

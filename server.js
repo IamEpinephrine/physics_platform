@@ -3,7 +3,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     swaggerJsdoc = require('swagger-jsdoc'),
     swaggerUi = require('swagger-ui-express'),
-    fileupload = require('express-fileupload');
+    fileupload = require('express-fileupload'),
+    cookieParser = require('cookie-parser');
 
 const physicsRoutes = require('./src/restapi/routes')
 
@@ -13,6 +14,8 @@ const port = 8000;
 app.use(cors());
 app.use(fileupload())
 app.use(express.json());
+app.use(cookieParser());
+
 app.get("/", (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.send("Hello world!");
