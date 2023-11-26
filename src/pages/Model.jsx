@@ -1,37 +1,15 @@
-import React, {useState, useEffect, Suspense} from 'react';
-import {useParams} from 'react-router-dom';
-import {Canvas, useLoader} from '@react-three/fiber'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import {Environment, OrbitControls} from "@react-three/drei";
+import React, {Component} from 'react';
+import Components from "../components/ComponentIndex";
 
-    export default function Model() {
-        const {id} = useParams();
 
-        function getModel() {
-            const request = new XMLHttpRequest();
-            request.open("GET", `http://localhost:8000/api/models/${id}`, false); // false makes the request synchronous
-            request.send(null);
+    class Model extends Component {
 
-            if (request.status === 200) {
-                const json = JSON.parse(request.responseText);
-                console.log(request.responseText);
-                console.log(json.model_path)
-                return json.model_path;
-            }
-            return null;
+        render() {
+            var type = "ModelFiber01";
+            const ComponentTORender = Components[type];
+            return <ComponentTORender/>
         }
 
-
-            return(
-                <div>
-                    <Canvas>
-                        <Suspense fallback={null}>
-                            <primitive object={useLoader(GLTFLoader, getModel()).scene} />
-                            <OrbitControls/>
-                        </Suspense>
-                    </Canvas>
-                </div>
-            );
     }
 
-
+export default Model;

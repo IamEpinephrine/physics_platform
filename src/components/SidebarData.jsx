@@ -12,21 +12,21 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'Models',
+        title: 'Our Models',
         path: '/models',
         icon: <GiIcons.GiAtom/>,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Community',
+        path: '/communitymodels',
+        icon: <GiIcons.GiArtificialHive/>,
         cName: 'nav-text'
     },
     {
         title: 'Add Model',
         path: '/addmodel',
         icon: <AiIcons.AiOutlinePlusCircle/>,
-        cName: 'nav-text'
-    },
-    {
-        title: 'Teacher Panel',
-        path: '/teacher',
-        icon: <MdIcons.MdManageAccounts/>,
         cName: 'nav-text'
     },
     {
@@ -38,7 +38,7 @@ export const SidebarData = [
     {
         title: 'Admin Panel',
         path: '/admin',
-        icon: <MdIcons.MdManageAccounts/>,
+        icon: <MdIcons.MdAdminPanelSettings/>,
         cName: 'nav-text'
     }
 ]

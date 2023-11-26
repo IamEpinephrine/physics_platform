@@ -76,40 +76,68 @@ const updateUserById = (res, req) => {
 
 /* CRUDs for MODELS table */
 
+const getAcceptedModels = (req, res) => {
+        pool.query(queries.getAcceptedModels, (error, results) => {
+            if(error) throw error;
+            res.status(200).json(results.rows);
+        })
+};
+
+const getCommunityModels = (req, res) => {
+    //if (req.role === 'A') {
+        pool.query(queries.getCommunityModels, (error, results) => {
+            if(error) throw error;
+            res.status(200).json(results.rows);
+        })
+    //} else {
+      //  res.status(401).json({error: "Not authorized."})
+    //}
+};
+
 const getModels = (req, res) => {
+    //if (req.role === 'A') {
     pool.query(queries.getModels, (error, results) => {
         if(error) throw error;
         res.status(200).json(results.rows);
     })
+    //} else {
+    //  res.status(401).json({error: "Not authorized."})
+    //}
 };
 
 const addModel = (req, res, next) => {
-    const {name, creator = 'Admin', creation_date = new Date(), status = 'U', icon = req.files.icon, model = req.files.model, imgname, modelname, mpath = path.join('/uploads/models/' + modelname)} = req.body;
-    const ipath = path.join('/uploads/images/' + imgname);
+    var _validFileExtensions = ["js", "gltf", "html", "jsx"];
+    const {name, creator = 'Admin', creation_date = new Date(), status = 'U', icon = req.files.icon, model = req.files.model} = req.body;
+    const ipath = path.join('/uploads/images/' + icon.name);
+    const mpath = path.join('/uploads/models/' + model.name);
+    var fileExt = model.name.split('.').pop();
 
-    icon.mv(path.join(__dirname + 'http:/../../public/uploads/images/' + icon.name), function(err, result) {
-        if(err)
-            throw err;
-    })
+    if(!_validFileExtensions.includes(fileExt)) {
+        res.status(400).json({error: "Invalid file extension."})
+    } else {
+        icon.mv(path.join(__dirname + 'http:/../../public/uploads/images/' + icon.name), function(err, result) {
+            if(err)
+                throw err;
+        })
 
-    model.mv(path.join(__dirname + '/../../public/uploads/models/' + model.name), function(err, result) {
-        if(err)
-            throw err;
-    })
+        model.mv(path.join(__dirname + '/../../public/uploads/models/' + model.name), function(err, result) {
+            if(err)
+                throw err;
+        })
 
-    pool.query(queries.addImage, [ipath], (error, results) => {
-            if (error) throw error;
-            console.log("Image added successfully.");
-            const image = results.rows[0].id;
-            pool.query(queries.addModel, [name, creator, creation_date, status, image, mpath, ipath], (error, results) => {
+        pool.query(queries.addImage, [ipath], (error, results) => {
                 if (error) throw error;
-                res.status(201).send("Model added successfully.");
-                console.log("Model added successfully.");
+                console.log("Image added successfully.");
+                const image = results.rows[0].id;
+            pool.query(queries.addModel, [name, creator, creation_date, status, image, mpath, ipath, fileExt], (error, results) => {
+                            if (error) throw error;
+                            res.status(201).send("Model added successfully.");
+                            console.log("Model added successfully.");
+                        }
+                    );
             }
         );
-        }
-    );
-
+    }
 }
 
 const getModelById = (req, res) => {
@@ -233,7 +261,7 @@ const login = (req, res) => {
 }
 
 const myProfile = (req, res) => {
-    res.json({message: req.userId + "and" + req.userName});
+    res.json({id: req.userId, username: req.userName, role: req.role});
 }
 
 const logout =  (req, res) => {
@@ -249,6 +277,8 @@ module.exports = {
     updateUserById,
     getModelById,
     getModels,
+    getCommunityModels,
+    getAcceptedModels,
     deleteModelById,
     acceptModelById,
     rejectModelById,

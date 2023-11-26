@@ -7,9 +7,11 @@ const addUser = "INSERT INTO users (firstname, surname, password, email, login, 
 const deleteUserById = "DELETE FROM users where id = $1";
 const updateUserById = "UPDATE users SET name = $1 WHERE id = $2";
 
-const addModel = "INSERT INTO models (name, creator, creation_date, status, image, model_path, image_path) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+const addModel = "INSERT INTO models (name, creator, creation_date, status, image, model_path, image_path, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)";
 const getModelById = "SELECT * FROM models WHERE id=$1 ORDER BY id DESC LIMIT 1";
-const getModels = "SELECT * FROM models";
+const getModels = "SELECT * FROM models WHERE type!='gltf'";
+const getCommunityModels = "SELECT * FROM models WHERE type='gltf'";
+const getAcceptedModels = "SELECT * FROM models WHERE status='A'";
 const deleteModelById = "DELETE FROM models where id = $1";
 const updateModelById = "UPDATE models SET status = $1 WHERE id = $2";
 
@@ -27,9 +29,11 @@ module.exports = {
     updateUserById,
     getModelById,
     getModels,
+    getAcceptedModels,
     deleteModelById,
     updateModelById,
     addImage,
     getImageById,
-    getUserByLogin
+    getUserByLogin,
+    getCommunityModels
 }

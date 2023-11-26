@@ -77,3 +77,9 @@
 span {
     margin-left: 16px;
 }
+
+img {
+    display: block;
+    margin-left: auto;
+    max-height: 100%;
+}
