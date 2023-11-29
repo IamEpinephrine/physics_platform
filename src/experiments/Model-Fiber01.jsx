@@ -14,7 +14,7 @@ function Cube(props) {
       {...props}
       ref={meshRef}>
       <boxGeometry />
-      <meshBasicMaterial color={0x00ff00} />
+      <meshPhongMaterial color={0x00ff00} />
     </mesh>
   );
 }
@@ -23,6 +23,8 @@ function ModelFiber01() {
   return (
     <div style={{ width: window.innerWidth + "px", height: window.innerHeight + "px" }}>
       <Canvas style={{ background: 'black' }}>
+          <ambientLight intensity={0.1} />
+          <directionalLight />
         <Cube />
       </Canvas>
     </div>

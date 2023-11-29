@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 import Model from './pages/Model';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import CommunityModels from "./pages/CommunityModels";
-import CommunityModel from "./pages/CommunityModels";
+import CommunityModel from "./pages/CommunityModel";
 
 const App = () => {
 
@@ -21,7 +21,7 @@ const App = () => {
                                   <Routes>
                                       <Route path='/' element={<Home/>}/>
                                       <Route path='/models' element={<Models/>}/>
-                                      <Route path='/communitymodels' element={<CommunityModels/>}/>
+                                      <Route path='/communitymodels/' element={<CommunityModels/>}/>
                                       <Route path='/addmodel' element={<AddModel/>}/>
                                       <Route path='/myaccount' element={<Account/>}/>
                                       <Route path='/models/:id' element={<Model/>}/>

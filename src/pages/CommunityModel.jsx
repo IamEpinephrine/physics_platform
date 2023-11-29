@@ -3,9 +3,8 @@ import {useParams} from 'react-router-dom';
 import {Canvas, useLoader} from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {Environment, OrbitControls} from "@react-three/drei";
-import 'example01.html'
 
-    export default function Model() {
+    export default function CommunityModel() {
         const {id} = useParams();
 
         function getModel() {
@@ -24,7 +23,7 @@ import 'example01.html'
 
 
             return(
-                <div>
+                <div style={{ width: window.innerWidth + "px", height: window.innerHeight + "px" }}>
                     <Canvas>
                         <Suspense fallback={null}>
                             <primitive object={useLoader(GLTFLoader, getModel()).scene} />

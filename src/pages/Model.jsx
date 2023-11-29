@@ -5,7 +5,7 @@ import Components from "../components/ComponentIndex";
     class Model extends Component {
 
         render() {
-            var type = "ModelFiber01";
+            var type = "ModelFiber04";
             const ComponentTORender = Components[type];
             return <ComponentTORender/>
         }

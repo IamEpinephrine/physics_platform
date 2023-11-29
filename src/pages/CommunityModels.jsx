@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import {Link} from "react-router-dom";
 import "../styles/AddModel.css";
 
-const Models = () => {
+const CommunityModels = () => {
     const [id, setId] = useState(null);
     const [errorMessage, setErrorMessage] =useState("");
     const [models, setModels] = useState(null);
@@ -54,4 +54,4 @@ const Models = () => {
 
 };
 
-export default Models;
+export default CommunityModels;
